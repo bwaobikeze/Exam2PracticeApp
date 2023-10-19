@@ -14,12 +14,8 @@ struct ContentView: View {
     @Environment(\.verticalSizeClass) var heightSize: UserInterfaceSizeClass?
         @Environment(\.horizontalSizeClass) var widthSize: UserInterfaceSizeClass?
     var body: some View {
-        if heightSize == .regular{
-            
-        }else if heightSize == .compact{
-            
-        }
         NavigationView{
+        if heightSize == .regular{
             VStack{
                 Text("\(priceVersion) Gas").font(.title)
                 List(Stations, id: \.station){ gasstation in
@@ -38,6 +34,27 @@ struct ContentView: View {
                     await loadData()
                 }
             }
+        }else if heightSize == .compact{
+            VStack{
+                Text("\(priceVersion) Gas").font(.title)
+                List(Stations, id: \.station){ gasstation in
+                    NavigationLink(destination: GasStationTabOfViews(stationgas: gasstation) ){
+                        HStack{
+                            Text(gasstation.station).font(.title2)
+                            Spacer()
+                            Text("$ \(formatPrice(gasstation.price(for: priceVersion)))").font(.title2)
+                            
+                        }.frame(height:100)
+                        
+                    }
+                }
+                .listStyle(PlainListStyle())
+                .task {
+                    await loadData()
+                }
+            }
+        }
+
             
         }
     }

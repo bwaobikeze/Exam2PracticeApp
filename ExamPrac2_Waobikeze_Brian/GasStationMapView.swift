@@ -28,11 +28,23 @@ struct GasStationMapView: View {
 
 
     var body: some View {
-        Map(position:  $campostion, selection: $selectionMarker){
-            Marker(stationName, coordinate: CLLocationCoordinate2D(latitude: capLat, longitude: capLong))
-                .tag(1)
-        }
-        .padding(.bottom, 15)
+        ZStack{
+            Map(position:  $campostion, selection: $selectionMarker){
+                Marker(stationName, coordinate: CLLocationCoordinate2D(latitude: capLat, longitude: capLong))
+                    .tag(1)
+            }
+            if let placemark = placemarkinfo {
+                VStack {
+                    Text(placemark.name ?? "")
+                        .font(.headline)
+                    Text(placemark.locality ?? "")
+                        .font(.subheadline)
+                }
+                .background(Color.white)
+                .cornerRadius(8)
+                .padding(8)
+            }
+        }.padding(.bottom, 15)
         .onAppear(){
             campostion = .region(region)
         }
